@@ -8,6 +8,7 @@ import {
   fetchLibrary,
   fetchBook,
   resetViewData,
+  fetchListViewData,
 } from "../../Utils/Features/librarySlice";
 import {
   startSync,
@@ -156,7 +157,13 @@ class ChromeExtensionConnector {
     }
   }
 
-  static async postSyncFullHighlights(cookies, userId, bookId, token) {
+  static async postSyncFullHighlights(
+    cookies,
+    userId,
+    bookId,
+    token,
+    callOriginView
+  ) {
     if (cookies !== null && cookies !== undefined) {
       axios
         .post(
@@ -181,7 +188,11 @@ class ChromeExtensionConnector {
               "Full Highlights sync is ready and you can see your highlights now: " +
                 response.message
             );
-            store.dispatch(resetViewData());
+            if (callOriginView === "book") {
+              store.dispatch(resetViewData());
+            } else {
+              store.dispatch(fetchListViewData(bookId));
+            }
           }
         })
         .catch((error) => {
@@ -204,7 +215,7 @@ class ChromeExtensionConnector {
     }
   }
 
-  static async SyncAmazonSingleBook(token, userId, bookId) {
+  static async SyncAmazonSingleBook(token, userId, bookId, callOriginView) {
     try {
       await AmazonConnector.authenticateFlowAndTriggerExtension();
 
@@ -221,7 +232,13 @@ class ChromeExtensionConnector {
         },
         (response) => {
           customLog(`${response}`);
-          this.postSyncSingleBook(response.cookies, userId, bookId, token);
+          this.postSyncSingleBook(
+            response.cookies,
+            userId,
+            bookId,
+            token,
+            callOriginView
+          );
         }
       );
 
@@ -239,7 +256,13 @@ class ChromeExtensionConnector {
     }
   }
 
-  static async postSyncSingleBook(cookies, userId, bookId, token) {
+  static async postSyncSingleBook(
+    cookies,
+    userId,
+    bookId,
+    token,
+    callOriginView
+  ) {
     if (cookies !== null && cookies !== undefined) {
       axios
         .post(
@@ -264,7 +287,13 @@ class ChromeExtensionConnector {
             store.dispatch(finishSync({ singleBook: true }));
             store.dispatch(enableSync());
             store.dispatch(fetchBook(bookId));
-            this.postSyncFullHighlights(cookies, userId, bookId, token);
+            this.postSyncFullHighlights(
+              cookies,
+              userId,
+              bookId,
+              token,
+              callOriginView
+            );
             this.showToastInfo(
               "Full Highlights Sync has started, please wait a little while and you will be notified when your full highlights are available."
             );

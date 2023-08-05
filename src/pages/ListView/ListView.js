@@ -8,7 +8,7 @@ import SquareIcon from "@mui/icons-material/Square";
 import { CardStrucutureBook, ChaptersUl, ChaptersLi } from "./styled";
 import "./ListView.css";
 
-import BookDetails from "../../components/BookDetails/index";
+import BookDetails from "../../components/BookDetails/BookDetails";
 import PersistentDrawerRight from "../../components/Drawer/Drawer";
 import Breadcum from "../../components/Breadcum/Breadcum";
 

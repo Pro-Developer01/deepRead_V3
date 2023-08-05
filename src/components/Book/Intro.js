@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -8,14 +8,10 @@ import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import PortraitIcon from "@mui/icons-material/Portrait";
 
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import InfoIcon from "@mui/icons-material/Info";
-
 import "../../pages/MyLibrary/MyLibrary.css";
-import ChromeExtensionConnector from "../Connectors/ChromeExtensionCommunication";
 
 import { updateBook } from "../../Utils/Features/librarySlice";
-import { formatDateString } from "../../helperFunctions/timing";
+import { AmazonSingleSync } from "./AmazonSingleSync";
 
 import {
   QontoConnector,
@@ -27,30 +23,6 @@ const steps = ["Read", "Highlights", "Idea Cards"];
 
 export const BookIntro = ({ bookData, list }) => {
   const dispatch = useDispatch();
-
-  const { userId, token } = useSelector((state) => state.auth);
-  const { amazonSyncDisabled, singleBookSyncMessage } = useSelector(
-    (state) => state.amazonSync
-  );
-
-  const syncInfoMessage =
-    `Initiates the book sync for ${bookData?.title}.\n` +
-    `And immediately after the full highlights sync to sync any highlights that are clipped in book sync because they are very long.`;
-
-  const fillUpdatedTimeForSyncMessage = (message) => {
-    return message.replace(
-      "#TIME#",
-      formatDateString(new Date(bookData?.updated_at))
-    );
-  };
-
-  const handleAmazonSingleBookSync = async (bookId) => {
-    try {
-      ChromeExtensionConnector.SyncAmazonSingleBook(token, userId, bookId);
-    } catch (error) {
-      console.log("Error handleAmazonSingleBookSync: ", error);
-    }
-  };
 
   return (
     <div className="libraryLists">
@@ -233,23 +205,7 @@ export const BookIntro = ({ bookData, list }) => {
             : "fetchStatusIconContainer cursor-pointer"
         }
       >
-        <Stack direction="row" justifyContent="left" alignItems="center">
-          {amazonSyncDisabled ? (
-            <div title={fillUpdatedTimeForSyncMessage(singleBookSyncMessage)}>
-              <PublishedWithChangesIcon sx={{ color: "red" }} />
-            </div>
-          ) : (
-            <div title={fillUpdatedTimeForSyncMessage(singleBookSyncMessage)}>
-              <PublishedWithChangesIcon
-                sx={{ color: "lightgreen" }}
-                onClick={() => handleAmazonSingleBookSync(bookData?._id)}
-              />
-            </div>
-          )}
-          <div title={syncInfoMessage}>
-            <InfoIcon sx={{ color: "lightgreen", width: 20 }} />
-          </div>
-        </Stack>
+        <AmazonSingleSync bookData={bookData} originView="book" />
       </div>
     </div>
   );

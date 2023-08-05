@@ -10,7 +10,7 @@ import "../ListView/ListView.css";
 //style component
 import { CardStrucutureBook, ChaptersUl, ChaptersLi } from "../ListView/styled";
 
-import BookDetails from "../../components/BookDetails/index";
+import BookDetails from "../../components/BookDetails/BookDetails";
 import { fetchIdeacardIcons } from "../../helperFunctions/getIdeacardIcons";
 import { useSelector, useDispatch } from "react-redux";
 

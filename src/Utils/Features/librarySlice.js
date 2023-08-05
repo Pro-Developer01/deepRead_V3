@@ -204,6 +204,8 @@ export const librarySlice = createSlice({
     builder
       .addCase(fetchLibrary.pending, (state, action) => {
         state.libraryStatus = LoadingStatus.Loading;
+        state.libraryError = null;
+        state.libraryData = null;
       })
       .addCase(fetchLibrary.fulfilled, (state, action) => {
         state.libraryData = action.payload;
@@ -239,6 +241,9 @@ export const librarySlice = createSlice({
       })
       .addCase(fetchListViewData.pending, (state, action) => {
         state.viewStatus = LoadingStatus.Loading;
+        state.viewError = null;
+        state.listViewData = null;
+        state.ideaCards = null;
       })
       .addCase(fetchListViewData.fulfilled, (state, action) => {
         state.listViewData = action.payload.highlights;
