@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-
 import { Stack } from "@mui/system";
 import ExpandIcon from "@mui/icons-material/Expand";
 
@@ -20,15 +18,8 @@ const resizeHandleStyle = {
   transform: "rotate(90deg)",
 };
 function BookDetails(props) {
-  const { userId, token } = useSelector((state) => state.auth);
   /* PROPS */
-  const {
-    book,
-    open,
-    resizableWidth,
-    setResizableWidth,
-    showResize = true,
-  } = props;
+  const { book, open, setResizableWidth, showResize = true } = props;
   const initialWidth = document.getElementById(
     "listViewResizable-Container"
   )?.offsetWidth;

@@ -10,12 +10,12 @@ import { getBookById } from "../../Utils/Features/librarySlice";
 
 export const Recommendation = ({ id }) => {
   const book = useSelector((state) => getBookById(state, id));
+  console.log("rec", book?.recomendation instanceof Array);
   return (
     <>
       <AccordionDetails sx={accordianDetailStyling}>
-        {!book?.recomendation?.length ? (
-          <span>No Data Available</span>
-        ) : (
+        {book?.recomendation instanceof Array &&
+        book?.recomendation?.length > 0 ? (
           book?.recomendation?.map((item, index) => {
             return (
               <div key={index} style={{ margin: "5px 0" }}>
@@ -40,6 +40,8 @@ export const Recommendation = ({ id }) => {
               </div>
             );
           })
+        ) : (
+          <span>No Data Available</span>
         )}
       </AccordionDetails>
     </>
